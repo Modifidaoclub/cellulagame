@@ -30,7 +30,6 @@ contract CellulaGame is ERC721EnumerableUpgradeable, CellulaNumericalControl{
 
     BitMaps.BitMap private randomBitmap;
 
-
     struct Cellula {
         uint16 geneType; //1.Original gene 2.Splicing gene 3.Synthetic gene
         uint16 x;
