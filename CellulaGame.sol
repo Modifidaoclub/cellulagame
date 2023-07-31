@@ -444,4 +444,52 @@ contract CellulaGame is ERC721EnumerableUpgradeable, CellulaNumericalControl{
     function _baseURI() internal view override returns (string memory) {
         return _baseUrl;
     }
+
+    function isCenterCellAlive(uint8[9] memory cells)
+    public
+    pure
+    returns (bool)
+    {
+        // Convert a one-dimensional array to a two-dimensional state matrix
+        bool[3][3] memory matrix = [
+        [false, false, false],
+        [false, false, false],
+        [false, false, false]
+        ];
+        for (uint256 i = 0; i < cells.length; i++) {
+            matrix[i / 3][i % 3] = cells[i] == 1;
+        }
+
+        // Get the coordinates of the center cell
+        uint8 centerX = 1;
+        uint8 centerY = 1;
+
+        // Calculate the state of the cells surrounding the center cell
+        uint8 aliveCount = 0;
+        for (uint8 i = 0; i < 3; i++) {
+            for (uint8 j = 0; j < 3; j++) {
+                if (i == centerX && j == centerY) {
+                    continue;
+                }
+                if (matrix[i][j]) {
+                    aliveCount++;
+                }
+            }
+        }
+
+        // Calculate the state of the center cell according to the rules of the Game of Life
+        if (matrix[centerX][centerY]) {
+            if (aliveCount == 2 || aliveCount == 3) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            if (aliveCount == 3) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
 }
